@@ -10,12 +10,21 @@ Kvar att göra:
 */
 #include "mbed.h"
 
-//sätt rätt PWN pins i labben
+//alla pin är nog 
 PwmOut red(p23);
 PwmOut blue(p25);
 PwmOut green(p24);
-PwmOut servo(p);
+PwmOut servo(p21);
 AnalogIn PM(p20);
+BusIn joy(p15,p12,p13,p16);
+
+/*
+JOYSTICK:
+Down:p12
+Left:p13
+Centre:p14
+Up:p15
+Right:p16  */
 
 //deklarerar våra functioner
 void fast();
@@ -26,7 +35,7 @@ void off();
 
 int main() {
     
-    int up = 1;
+    int up = 0;
     int down = 0;
     int right = 0;
     int left = 0;
@@ -51,15 +60,15 @@ int main() {
 }
 
 void off(){  //funktion för stänga av allt
-    red = 0;
-    blue = 0;
-    green = 0;
-    servo = 0;
+    red = 1;
+    blue = 1;
+    green = 1;
+    servo = 1;
 }
 
 void fast(){ //funktion för att köra vindrutetorkaren snabbt och blinkar med röd lampa
     servo.period_ms(20); //kolla upp om 20ms var standard
-    red = 0.5;
+    red = 1 - 0.5;
     float i;
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
@@ -74,7 +83,7 @@ void fast(){ //funktion för att köra vindrutetorkaren snabbt och blinkar med r
 
 void slow(){ //funktion för att köra vindrutetorkaren långsamt och blinkar med blå lampa
     servo.period_ms(20); 
-    blue = 0.5;
+    blue = 1 - 0.5;
     float i;
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
@@ -97,7 +106,7 @@ void interval(){  //grön lampa styrd av potentiometer efter 5 blink en torkning
     green.period_ms(interval * 1.5); //vi lägger nu på den halva tiden till perioden som vi stal för att den skulle lysa under
     float waiting = intervall* 1.5 * 5; //vi väntar 5X perioden + pulsbredden innan vi sätter på bladet
     wait_ms(waiting);
-    green = 0; //stänger av lampa
+    green = 1; //stänger av lampa
     
     float i;
     servo.period_ms(20); // korrigera rätt perioden för servon

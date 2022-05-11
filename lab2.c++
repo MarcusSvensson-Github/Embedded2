@@ -90,17 +90,17 @@ void slow(){ //funktion för att köra vindrutetorkaren långsamt och blinkar me
 void interval(){  //grön lampa styrd av potentiometer efter 5 blink en torkning
 
     float value = PM; //lista ut hur du får blink intervall mellan 300ms-1000ms, Detta ger (för 5 st blinkningar) torkarintervall från 1,5 till 5 sekunder
-    // du behöver också räkna blink innan torkaren kommer härnäst
+    // du behöver också räkna blink innan torkaren kommer härnäst. du vill samtidigt inte göra att pulsebredden tar ifrån de tiden
+
     float interval = value * 700 + 300;  //blink intervall mellan 300ms-1000ms
-    green = 0.5;
-    green.period_ms(interval);
-    float waiting = intervall * 5;
+    green.pulsewidth_ms(intervall/2) // kommer lysa hälften av intervallen
+    green.period_ms(interval * 1.5); //vi lägger nu på den halva tiden till perioden som vi stal för att den skulle lysa under
+    float waiting = intervall* 1.5 * 5; //vi väntar 5X perioden + pulsbredden innan vi sätter på bladet
     wait_ms(waiting);
-    green = 0;
-    //sätter in green till ett mräknat värde ifrån variabeln value
-    //skapa ett if statement utifrån pulsbredden så vi vet när 5 blinkningar har skett
+    green = 0; //stänger av lampa
+    
     float i;
-    servo.period_ms(20);
+    servo.period_ms(20); // korrigera rätt perioden för servon
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2); //justerar farten

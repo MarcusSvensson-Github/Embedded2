@@ -98,7 +98,9 @@ void off(){  //funktion för stänga av allt
     red = 1;
     blue = 1;
     green = 1;
-    servo = 0;
+    servo.period_ms(20);
+    servo.pulsewidth_us(900);
+    
 }
 
 void fast(){ //funktion för att köra vindrutetorkaren snabbt och blinkar med röd lampa
@@ -108,10 +110,16 @@ void fast(){ //funktion för att köra vindrutetorkaren snabbt och blinkar med r
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(1); //justerar farten
+        if(Down == 1 || Right == 1 || Left == 1){
+                    return;
+                    }
     }
     for (i=2100; i>900; i--){ //du vill den rör sig ner från 180-0 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(1);  //justerar farten
+        if(Down == 1 || Right == 1 || Left == 1){
+                    return;
+                    }
     }
 }
 
@@ -122,10 +130,16 @@ void slow(){ //funktion för att köra vindrutetorkaren långsamt och blinkar me
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2); //justerar farten
+        if(Up == 1 || Right == 1 || Left == 1){
+                    return;
+                    }
     }
     for (i=2100; i>900; i--){ //du vill den rör sig ner från 180-0 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2);  //justerar farten
+        if(Up == 1 || Right == 1 || Left == 1){
+                    return;
+                    }
     }
 }
 
@@ -140,6 +154,9 @@ void interval(){  //grön lampa styrd av potentiometer efter 5 blink en torkning
         wait_ms(100);
         green = 1;
         wait_ms(interval-100);
+        if(Down == 1 || Right == 1 || Up == 1){
+                    return;
+                    }
         }
     //green.pulsewidth_ms(interval/2); // kommer lysa hälften av intervallen
     /* red = 1;
@@ -155,9 +172,15 @@ void interval(){  //grön lampa styrd av potentiometer efter 5 blink en torkning
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2); //justerar farten
+        if(Down == 1 || Right == 1 || Up == 1){
+                    return;
+                    }
     }
     for (i=2100; i>900; i--){ //du vill den rör sig ner från 180-0 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2);  //justerar farten
+        if(Down == 1 || Right == 1 || Up == 1){
+                    return;
+                    }
     }
 }

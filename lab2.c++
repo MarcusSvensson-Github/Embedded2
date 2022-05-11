@@ -11,10 +11,10 @@ Kvar att göra:
 #include "mbed.h"
 
 //sätt rätt PWN pins i labben
-PwmOut red(p21);
-PwmOut blue(p22);
-PwmOut green(p23);
-PwmOut servo(p24);
+PwmOut red(p23);
+PwmOut blue(p25);
+PwmOut green(p24);
+PwmOut servo(p);
 AnalogIn PM(p20);
 
 //deklarerar våra functioner
@@ -90,9 +90,12 @@ void slow(){ //funktion för att köra vindrutetorkaren långsamt och blinkar me
 void interval(){  //grön lampa styrd av potentiometer efter 5 blink en torkning
     servo.period_ms(20); 
     
-    green = PM; //lista ut hur du får blink intervall mellan 300ms-1000ms, Detta ger (för 5 st blinkningar) torkarintervall från 1,5 till 5 sekunder
+    float value = PM; //lista ut hur du får blink intervall mellan 300ms-1000ms, Detta ger (för 5 st blinkningar) torkarintervall från 1,5 till 5 sekunder
     // du behöver också räkna blink innan torkaren kommer härnäst
     
+    //sätter in green till ett mräknat värde ifrån variabeln value
+
+    //skapa ett if statement utifrån pulsbredden så vi vet när 5 blinkningar har skett
     float i;
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);

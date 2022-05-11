@@ -36,55 +36,43 @@ void fast();
 void slow();
 void interval();
 void off();
+void check_input();
 
-
-int main() {
 bool fastF;
 bool slowF;
 bool intervalF;
+
+
+int main() {
+
     
     off();
     while (1) {
         // möjligtis sätt ett case beroende på hur joystick input ser ut
-        if(Up==1){
-            slowF = false;
-            intervalF = false;
+        if(Up==1 || fastF){
             fastF = true;
             while(fastF){
                 fast();
-                if(Down == 1 || Right == 1 || Left == 1){
-                    break;
-                    }
+                
                 }
             off();
         }
-        if(Down==1){
+        if(Down==1 || slowF){
             slowF = true;
-            intervalF = false;
-            fastF = false;
             while(slowF){
                 slow();
-                if(Up == 1 || Right == 1 || Left == 1){
-                    break;
-                    }
+                
                 }
             off();
         }
         if(Right==1){
-            slowF = false;
-            intervalF = false;
-            fastF = false;
             off();
         }
-        if(Left==1){
-            slowF = false;
+        if(Left==1 || intervalF){
             intervalF = true;
-            fastF = false;
             while(intervalF){
                 interval();
-                if(Down == 1 || Right == 1 || Up == 1){
-                    break;
-                    }
+                
                 }
             off();
         }
@@ -98,9 +86,57 @@ void off(){  //funktion för stänga av allt
     red = 1;
     blue = 1;
     green = 1;
-    servo.period_ms(20);
-    servo.pulsewidth_us(900);
-    
+    servo = 0;
+}
+
+void check_input(){
+        if(fastF){
+            if(Down == 1){
+                    fastF = false;
+                    slowF = true;
+                    
+            }
+            if(Right == 1){
+                    fastF = false;
+                    
+            }
+            if(Left == 1){
+                    fastF = false;
+                    intervalF = true;
+            }
+        }
+        if(slowF){
+            if(Up == 1){
+                    slowF = false;
+                    fastF = true;
+                    
+            }
+            if(Right == 1){
+                    slowF = false;
+                    
+            }
+            if(Left == 1){
+                    slowF = false;
+                    intervalF = true;
+            }
+        }
+        if(intervalF){
+            if(Up == 1){
+                    intervalF = false;
+                    fastF = true;
+                    
+            }
+            if(Right == 1){
+                    intervalF = false;
+                    
+            }
+            if(Down == 1){
+                    intervalF = false;
+                    slowF = true;
+            }
+        }
+        
+        
 }
 
 void fast(){ //funktion för att köra vindrutetorkaren snabbt och blinkar med röd lampa
@@ -110,16 +146,12 @@ void fast(){ //funktion för att köra vindrutetorkaren snabbt och blinkar med r
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(1); //justerar farten
-        if(Down == 1 || Right == 1 || Left == 1){
-                    return;
-                    }
+        check_input();
     }
     for (i=2100; i>900; i--){ //du vill den rör sig ner från 180-0 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(1);  //justerar farten
-        if(Down == 1 || Right == 1 || Left == 1){
-                    return;
-                    }
+        check_input();
     }
 }
 
@@ -130,16 +162,12 @@ void slow(){ //funktion för att köra vindrutetorkaren långsamt och blinkar me
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2); //justerar farten
-        if(Up == 1 || Right == 1 || Left == 1){
-                    return;
-                    }
+        check_input();
     }
     for (i=2100; i>900; i--){ //du vill den rör sig ner från 180-0 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2);  //justerar farten
-        if(Up == 1 || Right == 1 || Left == 1){
-                    return;
-                    }
+        check_input();
     }
 }
 
@@ -154,9 +182,7 @@ void interval(){  //grön lampa styrd av potentiometer efter 5 blink en torkning
         wait_ms(100);
         green = 1;
         wait_ms(interval-100);
-        if(Down == 1 || Right == 1 || Up == 1){
-                    return;
-                    }
+        check_input();
         }
     //green.pulsewidth_ms(interval/2); // kommer lysa hälften av intervallen
     /* red = 1;
@@ -172,15 +198,11 @@ void interval(){  //grön lampa styrd av potentiometer efter 5 blink en torkning
     for (i=900; i<2100; i++){ //du vill den rör upp sig från 0-180 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2); //justerar farten
-        if(Down == 1 || Right == 1 || Up == 1){
-                    return;
-                    }
+        check_input();
     }
     for (i=2100; i>900; i--){ //du vill den rör sig ner från 180-0 (900-2100 µs) vilken pulsbredd är det utav 20ms
         servo.pulsewidth_us(i);
         wait_ms(2);  //justerar farten
-        if(Down == 1 || Right == 1 || Up == 1){
-                    return;
-                    }
+        check_input();
     }
 }
